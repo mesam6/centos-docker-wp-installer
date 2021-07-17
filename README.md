@@ -1,7 +1,11 @@
 CentOS Docker Installer + Test LEMP WordPress containers stack
+
 Supported OS: CentOS
+
 Language: bash
+
 Author: shyamsundar bhat
+
 Description: This bash script will help you with install Docker packages on your CentOS system & helps build a default WordPress LEMP stack.
 
 Usage:
