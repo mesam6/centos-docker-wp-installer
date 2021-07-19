@@ -4,10 +4,8 @@
 _this_os=$(grep -oi centos /etc/redhat-release 2>/dev/null)
 _os_version=$(rpm -E %{rhel})
 _user=$(id -u)
-_dockerbin=$(whereis docker)
 _dockercomposebin=$(whereis docker-compose | awk '{print $2}')
 _docker_rpm=$(sudo yum list installed | grep -io docker-ce)
-_docker_compose_rpm=$(sudo yum list installed | grep -io docker-compose)
 _dc_file="wordpress/docker-compose.yml"
 option=$1
 
@@ -53,27 +51,8 @@ sudo yum remove -y docker \
 sudo yum remove -y docker \
                 docker-ce-cli \
                 containerd.io \
-
-# install yum-utils, add repo to yum-manager & install docker-ce,cli,containerd.io & start docker
-sudo yum install -y yum-utils
-sudo yum-config-manager \
-    --add-repo \
-    https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install docker-ce docker-ce-cli containerd.io
-
-# install latest docker-compose binary
-sudo curl -s -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/bin/docker-compose
-sudo chmod +x /usr/bin/docker-compose
-
-if (( "$_os_version" >= "7" ))
-then
-sudo systemctl start docker
-sudo systemctl enable docker
-elif (( "$_os_version" <= "6" ))
-then
-sudo service docker start
-sudo chkconfig docker on
-fi
+# do docker installation
+docker_installation
 }
 
 
